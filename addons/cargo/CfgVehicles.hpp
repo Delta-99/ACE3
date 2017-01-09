@@ -10,7 +10,7 @@ class CfgVehicles {
     class ACE_moduleCargoSettings: ACE_Module {
         scope = 2;
         displayName = CSTRING(SettingsModule_DisplayName);
-        icon = QUOTE(PATHTOF(UI\Icon_Module_Cargo_ca.paa));
+        icon = QPATHTOF(UI\Icon_Module_Cargo_ca.paa);
         category = "ACE_Logistics";
         function = QFUNC(moduleSettings);
         functionPriority = 1;
@@ -36,7 +36,7 @@ class CfgVehicles {
     class GVAR(makeLoadable): ACE_Module {
         scope = 2;
         displayName = CSTRING(makeLoadable_displayName);
-        icon = QUOTE(PATHTOF(UI\Icon_Module_makeLoadable_ca.paa));
+        icon = QPATHTOF(UI\Icon_Module_makeLoadable_ca.paa);
         category = "ACE_Logistics";
         function = QFUNC(moduleMakeLoadable);
         isGlobal = 1;
@@ -222,6 +222,8 @@ class CfgVehicles {
     };
 
     class Heli_Transport_04_base_F: Helicopter_Base_H {
+        // note the double brackets are because loadmasterTurrets is an array of arrays / turret paths
+        GVAR(loadmasterTurrets)[] = {{1}};
         GVAR(space) = 0;
         GVAR(hasCargo) = 0;
     };
@@ -257,12 +259,27 @@ class CfgVehicles {
         GVAR(space) = 4;
     };
 
-    // jets
+    // planes (off by default as most are attack jets)
     class Plane: Air {
         GVAR(space) = 0;
         GVAR(hasCargo) = 0;
     };
 
+    class Plane_Base_F: Plane {};
+    class Plane_Civil_01_base_F: Plane_Base_F { // Tanoa Civilian Prop Plane
+        GVAR(space) = 2;
+        GVAR(hasCargo) = 1;
+    };
+    class VTOL_Base_F;
+    class VTOL_01_base_F: VTOL_Base_F {
+        GVAR(space) = 4;
+        GVAR(hasCargo) = 1;
+    };
+    class VTOL_02_base_F: VTOL_Base_F {
+        GVAR(space) = 4;
+        GVAR(hasCargo) = 1;
+    };
+    
     // autonomus
     class UAV_01_base_F: Helicopter_Base_F {
         GVAR(space) = 0;
@@ -304,6 +321,26 @@ class CfgVehicles {
         GVAR(canLoad) = 1;
     };
 
+    // Taru pods
+    class Pod_Heli_Transport_04_base_F;
+    class Land_Pod_Heli_Transport_04_ammo_F: Pod_Heli_Transport_04_base_F {
+        GVAR(space) = 8;
+        GVAR(hasCargo) = 1;
+    };
+    class Land_Pod_Heli_Transport_04_box_F: Pod_Heli_Transport_04_base_F {
+        GVAR(space) = 20;
+        GVAR(hasCargo) = 1;
+    };
+    class Land_Pod_Heli_Transport_04_repair_F: Pod_Heli_Transport_04_base_F {
+        GVAR(space) = 12;
+        GVAR(hasCargo) = 1;
+    };
+    class Pod_Heli_Transport_04_crewed_base_F;
+    class Land_Pod_Heli_Transport_04_medevac_F: Pod_Heli_Transport_04_crewed_base_F {
+        GVAR(space) = 8;
+        GVAR(hasCargo) = 1;
+    };
+    
     class StaticMortar;
     class Mortar_01_base_F: StaticMortar {
         GVAR(size) = 2; // 1 = small, 2 = large
@@ -382,6 +419,36 @@ class CfgVehicles {
                 selection = "";
             };
         };
+    };
+    class Constructions_base_F;
+    class Land_WoodenBox_F: Constructions_base_F {
+        class EventHandlers {
+            class CBA_Extended_EventHandlers: CBA_Extended_EventHandlers {};
+        };
+
+        GVAR(space) = 2;
+        GVAR(hasCargo) = 2;
+        GVAR(size) = 3;
+        GVAR(canLoad) = 1;
+
+        maximumLoad = 2000;
+        transportMaxBackpacks = 12;
+        transportMaxMagazines = 64;
+        transportMaxWeapons = 12;
+    };
+    class Land_WoodenCrate_01_F: ThingX {
+        class EventHandlers {
+            class CBA_Extended_EventHandlers: CBA_Extended_EventHandlers {};
+        };
+        GVAR(space) = 3;
+        GVAR(hasCargo) = 3;
+        GVAR(size) = 3;
+        GVAR(canLoad) = 1;
+
+        maximumLoad = 2000;
+        transportMaxBackpacks = 12;
+        transportMaxMagazines = 64;
+        transportMaxWeapons = 12;
     };
 
     class Cargo_base_F: ThingX {

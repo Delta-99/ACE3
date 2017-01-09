@@ -24,7 +24,7 @@ params ["_tagPosASL", "_vectorDirAndUp", "_texture", "_object", "_unit"];
 TRACE_5("createTag:",_tagPosASL,_vectorDirAndUp,_texture,_object,_unit);
 
 if (_texture == "") exitWith {
-    ACE_LOGERROR_1("%1 is not a valid tag texture.",_texture);
+    ERROR_1("%1 is not a valid tag texture.",_texture);
     false
 };
 
@@ -34,7 +34,7 @@ _tag setPosASL _tagPosASL;
 _tag setVectorDirAndUp _vectorDirAndUp;
 
 // Throw a global event for mision makers
-["tagCreated", [_tag, _texture, _object, _unit]] call EFUNC(common,globalEvent);
+["ace_tagCreated", [_tag, _texture, _object, _unit]] call CBA_fnc_globalEvent;
 
 if (isNull _object) exitWith {true};
 

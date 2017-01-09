@@ -2,20 +2,21 @@
 
 if (!hasInterface) exitWith {};
 
-// reload mutex, you can't play signal while reloading
-GVAR(ReloadMutex) = true;
-
 // Add keybinds
 {
     _x params ["_currentName", "_key", ["_vanillaKey", false] ];
 
     // Don't add "ace_gestures_" prefix to BI gestures
-    private _signalName = _currentName;
-    if (!_vanillaKey) then {
-        _signalName = format [QGVAR(%1), _currentName];
+    private _signalName = if (_vanillaKey) then {
+        format ["BIgesture%1", _currentName];
+    } else {
+        format [QGVAR(%1), _currentName];
     };
 
     private _code = compile format [QUOTE('%1' call FUNC(playSignal)), _signalName];
+    if (_currentName == "Stop") then {
+        _code = compile format [QUOTE('%1' call FUNC(playSignal)), "BIgestureFreeze"];
+    };
 
     TRACE_4("Adding KeyBind",_currentName,_signalName,_code,_key);
 
